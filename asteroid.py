@@ -4,17 +4,15 @@ from circleshape import *
 from constants import *
 import random
 
-
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
-        self.x = x
-        self.y = y
-        self.radius = radius
-        super().__init__(self.x, self.y, self.radius)
+        super().__init__(x, y, radius)
+        self.rotation = 0
+
         self.position = pygame.Vector2(x, y)
 
     def draw(self, screen):
-        pygame.draw.circle(screen, '#FFFFFF', self.position, self.radius, width=2)
+        pygame.draw.circle(screen, '#FFFFFF', self.position, self.radius, width=1)
         #print(f"Drawing asteroid at position: ({self.x}, {self.y})")
 
     def update(self, dt):
@@ -34,3 +32,23 @@ class Asteroid(CircleShape):
 
         asteroid1.velocity = random_vector1 * 1.2
         asteroid2.velocity = random_vector2 * 1.2
+        asteroid1.clip(asteroid2)
+
+
+
+    def move(self, dt):
+        forward = self.velocity.rotate(self.rotation)
+        self.position += forward * dt
+
+    def bounce(self, Asteroid, dt):
+        #print(f'Asteroid collision detected. Asteroid base velocity: {self.velocity}')
+        
+
+        if abs(self.position.x - Asteroid.position.x) < abs(self.position.y - Asteroid.position.y):
+            self.velocity.y *= -1
+            Asteroid.velocity.y *= -1
+        if abs(self.position.y - Asteroid.position.y) < abs(self.position.x - Asteroid.position.x):
+            self.velocity.x *= -1
+            Asteroid.velocity.x *= -1
+
+        #print(f'Asteroid final velocity: {self.velocity}')
