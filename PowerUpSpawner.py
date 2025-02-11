@@ -26,17 +26,19 @@ class PowerUpSpawner(pygame.sprite.Sprite):
             ),
         ],
     ]
-    power_ups_list = [SpeedUp]
+    power_ups_list = [SpeedUp, FireRateUp]
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.spawn_timer = 0.0
 
-    def spawn(self, radius, position):
+    def spawn(self, radius, position, rng):
         #powerup = self.power_ups_list[random.randint(0, len(self.power_ups_list))](position.x, position.y, radius)
-        powerup = SpeedUp(position.x, position.y, radius)
+        if rng == 1:
+            powerup = SpeedUp(position.x, position.y, radius)
         #print(f"Spawning powerup at {powerup.position.x}, {powerup.position.y}")
-
+        if rng == 2:
+            powerup = FireRateUp(position.x, position.y, radius)
     def update(self, dt):
         #print("Spawning logic is running...")
         self.spawn_timer += dt
@@ -49,4 +51,5 @@ class PowerUpSpawner(pygame.sprite.Sprite):
             x = random.randint(100, 1600)
             y = random.randint(100, 900)
             position = pygame.Vector2(x, y)
-            self.spawn(25, position)
+            rng = random.randint(1, 2)
+            self.spawn(25, position, rng)

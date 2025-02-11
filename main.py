@@ -20,12 +20,14 @@ def main():
     shots = pygame.sprite.Group()
     asteroids2 = pygame.sprite.Group()
     speedups = pygame.sprite.Group()
+    fireups = pygame.sprite.Group()
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, asteroids2, updatable, drawable)
     AsteroidField.containers = (updatable)
     Shot.containers = (shots, updatable, drawable)
     PowerUpSpawner.containers = (updatable)
     SpeedUp.containers = (drawable, speedups)
+    FireRateUp.containers = (drawable, fireups)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     field = AsteroidField()
@@ -73,12 +75,20 @@ def main():
                 player.speedup_time = 0
             if player.speedup_time > SPEED_UP_DURATION:
                 player.speed = PLAYER_SPEED
-                
-            
+        
+        for fireup in fireups:
+            player.fireup_time += dt
+            if player.colliding(fireup) == True and player.shot_cd == PLAYER_SHOOT_COOLDOWN:
+                player.shot_cd = 0.05
+                fireup.kill()
+                player.fireup_time = 0
+            if player.fireup_time > FIRE_UP_DURATION:
+                player.shot_cd = PLAYER_SHOOT_COOLDOWN
+
         for object in drawable:
             object.draw(screen)
         
-        print(f"Speedups: {len(speedups)}")
+        print(f"Speedups: {len(fireups)}")
         pygame.display.flip()
     
 if __name__ == "__main__":

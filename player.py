@@ -3,9 +3,7 @@ from constants import *
 from circleshape import *
 from main import *
 
-class Player(CircleShape):
-    
-
+class Player(CircleShape):  
     def __init__(self, x, y):
         self.score = 0
         self.shot_timer = 0
@@ -15,6 +13,8 @@ class Player(CircleShape):
         self.y = y
         self.speed = PLAYER_SPEED
         self.speedup_time = 0
+        self.fireup_time = 0
+        self.shot_cd = 0.2
         super().__init__(self.x, self.y, self.radius)
     
     # in the player class
@@ -67,11 +67,10 @@ class Player(CircleShape):
 
         bullet = Shot(self.position.x, self.position.y, velocity, self.rotation)
 
-        self.shot_timer = PLAYER_SHOOT_COOLDOWN
+        self.shot_timer = self.shot_cd
 
 
 class Shot(CircleShape):
-
     def __init__(self, x, y, velocity, rotation):
         super().__init__(x, y, SHOT_RADIUS)
         self.rotation = rotation

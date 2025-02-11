@@ -17,6 +17,7 @@ SHOT_RADIUS = 5
 
 POWER_UP_SPAWN_RATE = 10 # seconds
 SPEED_UP_DURATION = 15 # seconds
+FIRE_UP_DURATION = 15 # seconds
 
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
