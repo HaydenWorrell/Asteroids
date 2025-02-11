@@ -5,19 +5,20 @@ from main import *
 
 class Player(CircleShape):  
     def __init__(self, x, y):
-        self.score = 0
-        self.shot_timer = 0
-        self.rotation = 0
         self.radius = PLAYER_RADIUS
-        self.x = x
-        self.y = y
+        super().__init__(x, y, self.radius)
+
+        self.high_score = 0
+        self.score = 0
+        self.rotation = 0        
         self.speed = PLAYER_SPEED
+
+        #powerup / ability base timers
         self.speedup_time = 0
         self.fireup_time = 0
         self.shot_cd = 0.2
-        super().__init__(self.x, self.y, self.radius)
-    
-    # in the player class
+        self.shot_timer = 0
+        
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
@@ -72,12 +73,12 @@ class Player(CircleShape):
 
 class Shot(CircleShape):
     def __init__(self, x, y, velocity, rotation):
-        super().__init__(x, y, SHOT_RADIUS)
         self.rotation = rotation
         self.radius = SHOT_RADIUS
         self.position = pygame.Vector2(x, y)
         self.x = x
         self.y = y
+        super().__init__(x, y, SHOT_RADIUS)
         self.velocity = velocity
 
 

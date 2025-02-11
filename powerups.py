@@ -24,4 +24,4 @@ class FireRateUp(CircleShape):
 
     def draw(self, screen):
         pygame.draw.circle(screen, '#0000FF', self.position, self.radius, width=10)
-        print(f"drawing fire rate up at {self.position.x}, {self.position.y}")
+        #print(f"drawing fire rate up at {self.position.x}, {self.position.y}")

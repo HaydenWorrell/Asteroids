@@ -19,6 +19,7 @@ def main():
     drawable = pygame.sprite.Group()
     shots = pygame.sprite.Group()
     asteroids2 = pygame.sprite.Group()
+    powerups = pygame.sprite.Group()
     speedups = pygame.sprite.Group()
     fireups = pygame.sprite.Group()
     Player.containers = (updatable, drawable)
@@ -26,8 +27,8 @@ def main():
     AsteroidField.containers = (updatable)
     Shot.containers = (shots, updatable, drawable)
     PowerUpSpawner.containers = (updatable)
-    SpeedUp.containers = (drawable, speedups)
-    FireRateUp.containers = (drawable, fireups)
+    SpeedUp.containers = (drawable, speedups, powerups)
+    FireRateUp.containers = (drawable, fireups, powerups)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     field = AsteroidField()
@@ -46,49 +47,80 @@ def main():
         dt = clock.tick(60) / 1000
         screen.fill('#000000', rect=None, special_flags=0)
 
-        text = font.render(f'Score: {player.score}', True, WHITE, BLACK)
-        textRect = text.get_rect()
-        textRect.center = (X, Y)        
-        
-        screen.blit(text, textRect)
+        #current score display
+        score = font.render(f'Score: {player.score}', True, WHITE, BLACK)
+        scoreRect = score.get_rect()
+        scoreRect.center = (1500, 850)             
+        screen.blit(score, scoreRect)
 
         updatable.update(dt)
+
         for asteroid in asteroids:
             if player.colliding(asteroid) == True:
                 #print("Game over!")
-                player.score = 0
+
+                if player.score > player.high_score:
+                    player.high_score = player.score
+                    player.score = 0
+
+                for powerup in powerups:
+                    powerup.kill()
+
+                for asteroid in asteroids2:
+                    asteroid.kill()
+
+                player.score = 0       
+                player.position = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+                player.speed = PLAYER_SPEED
+                player.speedup_time = 0
+                player.shot_cd = PLAYER_SHOOT_COOLDOWN
+                player.fireup_time = 0
+
             for other_asteroid in asteroids2:
                 if other_asteroid != asteroid:
                     if other_asteroid.colliding(asteroid):
                         asteroid.clip(other_asteroid)
-                        asteroid.bounce(other_asteroid, dt)                   
+                        asteroid.bounce(other_asteroid, dt)
+
             for shot in shots:
                 if shot.colliding(asteroid) == True:
                     asteroid.split()
                     shot.kill()
                     player.score += 1
+        
+        #displays high score in the top right
+        high_score_display = font.render(f'High Score: {player.high_score}', True, WHITE, BLACK)
+        highScoreRect = score.get_rect()
+        highScoreRect.center = (1420, 50)
+        screen.blit(high_score_display, highScoreRect)
+
+        #powerup pickups
         for speedup in speedups:
-            player.speedup_time += dt
+
             if player.colliding(speedup) == True and player.speed == PLAYER_SPEED:
-                player.speed *= 1.5
+                player.speed *= 2
                 speedup.kill()                    
                 player.speedup_time = 0
-            if player.speedup_time > SPEED_UP_DURATION:
-                player.speed = PLAYER_SPEED
+                
+        player.speedup_time += dt
+        if player.speedup_time > SPEED_UP_DURATION:
+            player.speed = PLAYER_SPEED
         
         for fireup in fireups:
-            player.fireup_time += dt
+
             if player.colliding(fireup) == True and player.shot_cd == PLAYER_SHOOT_COOLDOWN:
                 player.shot_cd = 0.05
                 fireup.kill()
                 player.fireup_time = 0
-            if player.fireup_time > FIRE_UP_DURATION:
-                player.shot_cd = PLAYER_SHOOT_COOLDOWN
+        
+        player.fireup_time += dt
+        if player.fireup_time > FIRE_UP_DURATION:
+            player.shot_cd = PLAYER_SHOOT_COOLDOWN
 
         for object in drawable:
             object.draw(screen)
         
-        print(f"Speedups: {len(fireups)}")
+        #print(f"Fireups: {len(fireups)}")
         pygame.display.flip()
     
 if __name__ == "__main__":
