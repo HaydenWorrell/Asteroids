@@ -14,10 +14,14 @@ PLAYER_SHOOT_COOLDOWN = 0.2
 
 SHOT_RADIUS = 5
 
+
+POWER_UP_SPAWN_RATE = 10 # seconds
+SPEED_UP_DURATION = 15 # seconds
+
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 128)
 BLACK = (0, 0, 0)
 
-X = 1200
-Y = 700
+X = 1500
+Y = 850

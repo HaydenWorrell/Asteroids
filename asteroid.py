@@ -29,12 +29,11 @@ class Asteroid(CircleShape):
 
         asteroid1 = Asteroid(self.position.x, self.position.y, self.radius)
         asteroid2 = Asteroid(self.position.x, self.position.y, self.radius)
+        
+        asteroid1.clip(asteroid2)
 
         asteroid1.velocity = random_vector1 * 1.2
         asteroid2.velocity = random_vector2 * 1.2
-        asteroid1.clip(asteroid2)
-
-
 
     def move(self, dt):
         forward = self.velocity.rotate(self.rotation)

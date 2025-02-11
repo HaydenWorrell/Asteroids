@@ -4,6 +4,8 @@ from circleshape import *
 from player import *
 from asteroid import *
 from asteroidfield import *
+from powerups import *
+from PowerUpSpawner import *
 
 def main():
     pygame.init()
@@ -17,13 +19,17 @@ def main():
     drawable = pygame.sprite.Group()
     shots = pygame.sprite.Group()
     asteroids2 = pygame.sprite.Group()
+    speedups = pygame.sprite.Group()
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, asteroids2, updatable, drawable)
     AsteroidField.containers = (updatable)
     Shot.containers = (shots, updatable, drawable)
+    PowerUpSpawner.containers = (updatable)
+    SpeedUp.containers = (drawable, speedups)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-    field = AsteroidField()    
+    field = AsteroidField()
+    powerup = PowerUpSpawner()
 
     print("Starting asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
@@ -47,7 +53,8 @@ def main():
         updatable.update(dt)
         for asteroid in asteroids:
             if player.colliding(asteroid) == True:
-                print("Game over!")
+                #print("Game over!")
+                player.score = 0
             for other_asteroid in asteroids2:
                 if other_asteroid != asteroid:
                     if other_asteroid.colliding(asteroid):
@@ -57,12 +64,21 @@ def main():
                 if shot.colliding(asteroid) == True:
                     asteroid.split()
                     shot.kill()
-                    player.score += 1                    
+                    player.score += 1
+        for speedup in speedups:
+            player.speedup_time += dt
+            if player.colliding(speedup) == True and player.speed == PLAYER_SPEED:
+                player.speed *= 1.5
+                speedup.kill()                    
+                player.speedup_time = 0
+            if player.speedup_time > SPEED_UP_DURATION:
+                player.speed = PLAYER_SPEED
                 
             
         for object in drawable:
             object.draw(screen)
         
+        print(f"Speedups: {len(speedups)}")
         pygame.display.flip()
     
 if __name__ == "__main__":

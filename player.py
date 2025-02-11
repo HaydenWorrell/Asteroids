@@ -13,6 +13,8 @@ class Player(CircleShape):
         self.radius = PLAYER_RADIUS
         self.x = x
         self.y = y
+        self.speed = PLAYER_SPEED
+        self.speedup_time = 0
         super().__init__(self.x, self.y, self.radius)
     
     # in the player class
@@ -55,7 +57,7 @@ class Player(CircleShape):
 
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
-        self.position += forward * PLAYER_SPEED * dt
+        self.position += forward * self.speed * dt
 
     def shoot(self, dt):
         if self.shot_timer > 0:
