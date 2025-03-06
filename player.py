@@ -3,6 +3,28 @@ from constants import *
 from circleshape import *
 from main import *
 
+class Shot(CircleShape):
+    def __init__(self, x, y, velocity, rotation):
+        self.rotation = rotation
+        self.radius = SHOT_RADIUS
+        self.position = pygame.Vector2(x, y)
+        self.x = x
+        self.y = y
+        super().__init__(x, y, SHOT_RADIUS)
+        self.velocity = velocity
+
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, "#FFFFFF", self.position, self.radius, width=1)
+
+    def update(self, dt):
+        self.position += (self.velocity * dt)
+        self.move(dt)
+
+    def move(self, dt):
+        forward = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+        self.position += forward * dt
+        
 class Player(CircleShape):  
     def __init__(self, x, y):
         self.radius = PLAYER_RADIUS
@@ -10,6 +32,9 @@ class Player(CircleShape):
 
         self.high_score = 0
         self.score = 0
+        self.experience = PLAYER_BASE_XP
+        self.level = PLAYER_BASE_LEVEL
+        self.xp_to_level = PLAYER_BASE_XP_REQ
         self.rotation = 0        
         self.speed = PLAYER_SPEED
 
@@ -71,24 +96,4 @@ class Player(CircleShape):
         self.shot_timer = self.shot_cd
 
 
-class Shot(CircleShape):
-    def __init__(self, x, y, velocity, rotation):
-        self.rotation = rotation
-        self.radius = SHOT_RADIUS
-        self.position = pygame.Vector2(x, y)
-        self.x = x
-        self.y = y
-        super().__init__(x, y, SHOT_RADIUS)
-        self.velocity = velocity
 
-
-    def draw(self, screen):
-        pygame.draw.circle(screen, "#FFFFFF", self.position, self.radius, width=1)
-
-    def update(self, dt):
-        self.position += (self.velocity * dt)
-        self.move(dt)
-
-    def move(self, dt):
-        forward = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
-        self.position += forward * dt

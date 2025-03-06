@@ -1,4 +1,5 @@
 import pygame
+import random
 from constants import *
 from circleshape import *
 from player import *
@@ -75,6 +76,9 @@ def main():
                 player.speedup_time = 0
                 player.shot_cd = PLAYER_SHOOT_COOLDOWN
                 player.fireup_time = 0
+                player.level = PLAYER_BASE_LEVEL
+                player.xp_to_level = PLAYER_BASE_XP_REQ
+                player.experience = PLAYER_BASE_XP
 
             for other_asteroid in asteroids2:
                 if other_asteroid != asteroid:
@@ -84,15 +88,40 @@ def main():
 
             for shot in shots:
                 if shot.colliding(asteroid) == True:
-                    asteroid.split()
+                    
                     shot.kill()
                     player.score += 1
+                    xp_rng = random.randint(1, 3)
+                    
+                    if xp_rng == 1:
+                        player.experience += 10
+                        print(f"xp_rng = {xp_rng}, gained 10 xp Total xp = {player.experience} XP to level = {player.xp_to_level}")
+                    
+                    if xp_rng == 2:
+                        player.experience += 20
+                        print(f"xp_rng = {xp_rng}, gained 20 xp Total xp = {player.experience} XP to level = {player.xp_to_level}")
+                    
+                    if xp_rng == 3:
+                        player.experience += 30
+                        print(f"xp_rng = {xp_rng}, gained 30 xp. Total xp = {player.experience}. XP to level = {player.xp_to_level}")
+                        
+                    asteroid.split()
+                    
+        if player.experience >= player.xp_to_level:
+            player.level += 1
+            player.xp_to_level *= 2
+            
         
         #displays high score in the top right
         high_score_display = font.render(f'High Score: {player.high_score}', True, WHITE, BLACK)
         highScoreRect = score.get_rect()
         highScoreRect.center = (1420, 50)
         screen.blit(high_score_display, highScoreRect)
+
+        level_display = font.render(f'Level: {player.level}', True, WHITE, BLACK)
+        level_display_rect = level_display.get_rect()
+        level_display_rect.center = (800, 50)
+        screen.blit(level_display, level_display_rect)
 
         #powerup pickups
         for speedup in speedups:
