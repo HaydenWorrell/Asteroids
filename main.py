@@ -79,6 +79,8 @@ def main():
                 player.level = PLAYER_BASE_LEVEL
                 player.xp_to_level = PLAYER_BASE_XP_REQ
                 player.experience = PLAYER_BASE_XP
+                
+                field.world_level = 1
 
             for other_asteroid in asteroids2:
                 if other_asteroid != asteroid:
@@ -95,22 +97,33 @@ def main():
                     
                     if xp_rng == 1:
                         player.experience += 10
-                        print(f"xp_rng = {xp_rng}, gained 10 xp Total xp = {player.experience} XP to level = {player.xp_to_level}")
+                        #print(f"xp_rng = {xp_rng}, gained 10 xp Total xp = {player.experience} XP to level = {player.xp_to_level}")
                     
                     if xp_rng == 2:
                         player.experience += 20
-                        print(f"xp_rng = {xp_rng}, gained 20 xp Total xp = {player.experience} XP to level = {player.xp_to_level}")
+                        #print(f"xp_rng = {xp_rng}, gained 20 xp Total xp = {player.experience} XP to level = {player.xp_to_level}")
                     
                     if xp_rng == 3:
                         player.experience += 30
-                        print(f"xp_rng = {xp_rng}, gained 30 xp. Total xp = {player.experience}. XP to level = {player.xp_to_level}")
+                        #print(f"xp_rng = {xp_rng}, gained 30 xp. Total xp = {player.experience}. XP to level = {player.xp_to_level}")
                         
                     asteroid.split()
                     
         if player.experience >= player.xp_to_level:
             player.level += 1
+            field.world_level += 1
             player.xp_to_level *= 2
             
+            #asteroid.velocity *= (player.level * 0.75)
+            #print("Asteroid velocity updated")
+            
+        #req = player.level + 1    
+        #if player.level > 1:
+            
+            #if req <= player.level:
+                #asteroid.velocity *= (player.level * 0.5)
+                #print("Asteroid velocity being updated")
+                #req += 1
         
         #displays high score in the top right
         high_score_display = font.render(f'High Score: {player.high_score}', True, WHITE, BLACK)
