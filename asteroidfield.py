@@ -1,7 +1,7 @@
 import pygame
 import random
 from asteroid import Asteroid
-from constants import *
+from constants import ASTEROID_SPAWN_RATE, ASTEROID_KINDS, ASTEROID_MAX_RADIUS, ASTEROID_MIN_RADIUS, SCREEN_HEIGHT, SCREEN_WIDTH
 
 
 
@@ -57,8 +57,8 @@ class AsteroidField(pygame.sprite.Sprite):
             
             if self.world_level == 1:
                 self.spawn(ASTEROID_MIN_RADIUS * kind, position, velocity)
-                print(f"Spawning an asteroid! World level = {self.world_level}")
+                #print(f"Spawning an asteroid! World level = {self.world_level}")
                 
             if self.world_level > 1:
                 self.spawn(ASTEROID_MIN_RADIUS * kind, position, (velocity * (self.world_level * 0.75)))
-                print(f"Spawning a level {self.world_level} asteroid!")
+                #print(f"Spawning a level {self.world_level} asteroid!")

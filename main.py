@@ -1,12 +1,11 @@
 import pygame
 import random
-from constants import *
-from circleshape import *
-from player import *
-from asteroid import *
-from asteroidfield import *
-from powerups import *
-from PowerUpSpawner import *
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH, WHITE, BLACK, PLAYER_BASE_LEVEL, PLAYER_BASE_XP, PLAYER_BASE_XP_REQ, PLAYER_SHOOT_COOLDOWN, PLAYER_SPEED, SPEED_UP_DURATION, FIRE_UP_DURATION
+from player import Player, Shot
+from asteroid import Asteroid 
+from asteroidfield import AsteroidField
+from powerups import SpeedUp, FireRateUp
+from PowerUpSpawner import PowerUpSpawner
 
 def main():
     pygame.init()

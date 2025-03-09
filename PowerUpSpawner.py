@@ -1,7 +1,7 @@
 import pygame
 import random
-from constants import *
-from powerups import *
+from constants import POWER_UP_SPAWN_RATE, SCREEN_HEIGHT, SCREEN_WIDTH
+from powerups import SpeedUp, FireRateUp
 
 class PowerUpSpawner(pygame.sprite.Sprite):
     edges = [

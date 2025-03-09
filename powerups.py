@@ -1,8 +1,5 @@
 import pygame
-import random
-from circleshape import *
-from constants import *
-from main import *
+from circleshape import CircleShape
 
 
 class SpeedUp(CircleShape):
